@@ -20,23 +20,28 @@ class AbsensiController extends Controller
      */
     public function index(Request $request)
     {
-        $meta = Pagination::defaultMetaInput($request->only(['page','perPage','order','dir','search']));
-        $query = Absensi::query();
-        $query->where(function($q) use($meta){
-            $q->orWhere('status_kehadiran', 'like', $meta['search'] . '%');
-        });
-        $total = $query->count();
-        $meta = Pagination::additionalMeta($meta, $total);
-        if ($meta['perPage'] != '-1') {
-            $query->offset($meta['offset'])->limit($meta['perPage']);
+        try{
+            $meta = Pagination::defaultMetaInput($request->only(['page','perPage','order','dir','search']));
+            $query = Absensi::query();
+            $query->where(function($q) use($meta){
+                $q->orWhere('status_kehadiran', 'like', $meta['search'] . '%');
+            });
+            $total = $query->count();
+            $meta = Pagination::additionalMeta($meta, $total);
+            if ($meta['perPage'] != '-1') {
+                $query->offset($meta['offset'])->limit($meta['perPage']);
+            }
+            $results = $query->get();
+            $data = [
+                'message'  => 'List Data Karyawan',
+                'results'  => $results,
+                'meta'     =>  $meta
+            ];
+            return Response::send(200,$data);
+        }catch(Exception $error){
+            return Response::send(500,$error->getMessage());
+
         }
-        $results = $query->get();
-        $data = [
-            'message'  => 'List Data Karyawan',
-            'results'  => $results,
-            'meta'     =>  $meta
-        ];
-        return Response::send(200,$data);
     }
 
     /**
@@ -100,7 +105,8 @@ class AbsensiController extends Controller
      */
     public function update(Request $request)
     {
-        $check = Absensi::where('id',$request->id)->first();
+        try {
+            $check = Absensi::where('id',$request->id)->first();
         if($check){
             $updateData = Absensi::where('id',$request->id)->update($request->all());
             $data = [
@@ -114,6 +120,9 @@ class AbsensiController extends Controller
             "data"=>[]
         ];
         return Response::send(200,$data);
+    } catch (Exception $error) {
+            return Response::send(500,$error->getMessage());
+        }
     }
 
     /**
@@ -124,6 +133,7 @@ class AbsensiController extends Controller
      */
     public function destroy(Request $request)
     {
+       try {
         $check = Absensi::find($request->id);
     	if($check){
     	   $check->delete();
@@ -138,5 +148,8 @@ class AbsensiController extends Controller
     	   "data"=>[]
     	];
         return Response::send(200,$data);
+    } catch (Exception $error) {
+           return Response::send(500,$error->getMessage());
+       }
     }
 }
