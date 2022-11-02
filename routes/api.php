@@ -23,4 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group(['prefix'=>'karyawan','as'=>'karyawan'],function(){
     Route::get('/',[KaryawanController::class,'index']);
+    Route::post('/',[KaryawanController::class,'store']);
+    Route::put('/',[KaryawanController::class,'update']);
+    Route::delete('/',[KaryawanController::class,'destroy']);
 });
