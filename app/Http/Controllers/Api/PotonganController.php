@@ -5,13 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Helpers\Pagination;
 use App\Helpers\Response;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\KaryawanRequest;
-use App\Models\Karyawan;
+use App\Http\Requests\PotonganRequest;
+use App\Models\Potongan;
 use Exception;
 use Illuminate\Http\Request;
-use PhpParser\Node\Stmt\TryCatch;
 
-class KaryawanController extends Controller
+class PotonganController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,9 +21,9 @@ class KaryawanController extends Controller
     {
         try{
             $meta = Pagination::defaultMetaInput($request->only(['page','perPage','order','dir','search']));
-            $query = Karyawan::query();
+            $query = Potongan::query();
             $query->where(function($q) use($meta){
-                $q->orWhere('nama', 'like', $meta['search'] . '%');
+                $q->orWhere('jumlah', 'like', $meta['search'] . '%');
             });
             $total = $query->count();
             $meta = Pagination::additionalMeta($meta, $total);
@@ -59,10 +58,10 @@ class KaryawanController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(KaryawanRequest $request)
+    public function store(PotonganRequest $request)
     {
         try{
-            $storeData = Karyawan::create($request->all());
+            $storeData = Potongan::create($request->all());
             $data = [
                 'message'=>'Data Created Success',
                 'data'=>$storeData
@@ -102,12 +101,12 @@ class KaryawanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(KaryawanRequest $request)
+    public function update(PotonganRequest $request)
     {
         try{
-            $check = Karyawan::where('id',$request->id)->first();
+            $check = Potongan::where('id',$request->id)->first();
             if($check){
-                $updateData = Karyawan::where('id',$request->id)->update($request->all());
+                $updateData = Potongan::where('id',$request->id)->update($request->all());
                 $data = [
                     'message'=>'Data Updated Success',
                     'data'=>$updateData
@@ -132,23 +131,23 @@ class KaryawanController extends Controller
      */
     public function destroy(Request $request)
     {
-       try{
-        $check = Karyawan::find($request->id);
-    	if($check){
-    	   $check->delete();
-    	   $data = [
-    	       "message"=>"Data Deleted Success",
-    	       "data"=>$check
-           ];
-           return Response::send(200,$data);
-    	}
-    	$data = [
-    	   "message"=>"Data Not Found",
-    	   "data"=>[]
-    	];
-        return Response::send(200,$data);
-    }catch(Exception $error){
-           return Response::send(500,$error->getMessage());
-       }
+        try{
+            $check = Potongan::find($request->id);
+            if($check){
+               $check->delete();
+               $data = [
+                   "message"=>"Data Deleted Success",
+                   "data"=>$check
+               ];
+               return Response::send(200,$data);
+            }
+            $data = [
+               "message"=>"Data Not Found",
+               "data"=>[]
+            ];
+            return Response::send(200,$data);
+        }catch(Exception $error){
+               return Response::send(500,$error->getMessage());
+           }
     }
 }

@@ -5,13 +5,13 @@ namespace App\Http\Controllers\Api;
 use App\Helpers\Pagination;
 use App\Helpers\Response;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\KaryawanRequest;
+use App\Http\Requests\AbsensiRequest;
+use App\Models\Absensi;
 use App\Models\Karyawan;
 use Exception;
 use Illuminate\Http\Request;
-use PhpParser\Node\Stmt\TryCatch;
 
-class KaryawanController extends Controller
+class AbsensiController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,9 +22,10 @@ class KaryawanController extends Controller
     {
         try{
             $meta = Pagination::defaultMetaInput($request->only(['page','perPage','order','dir','search']));
-            $query = Karyawan::query();
+            $query = Absensi::query();
+            $query = $query->with('karyawan');
             $query->where(function($q) use($meta){
-                $q->orWhere('nama', 'like', $meta['search'] . '%');
+                $q->orWhere('status_kehadiran', 'like', $meta['search'] . '%');
             });
             $total = $query->count();
             $meta = Pagination::additionalMeta($meta, $total);
@@ -40,6 +41,7 @@ class KaryawanController extends Controller
             return Response::send(200,$data);
         }catch(Exception $error){
             return Response::send(500,$error->getMessage());
+
         }
     }
 
@@ -59,10 +61,10 @@ class KaryawanController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(KaryawanRequest $request)
+    public function store(AbsensiRequest $request)
     {
         try{
-            $storeData = Karyawan::create($request->all());
+            $storeData = Absensi::create($request->all());
             $data = [
                 'message'=>'Data Created Success',
                 'data'=>$storeData
@@ -102,24 +104,24 @@ class KaryawanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(KaryawanRequest $request)
+    public function update(Request $request)
     {
-        try{
-            $check = Karyawan::where('id',$request->id)->first();
-            if($check){
-                $updateData = Karyawan::where('id',$request->id)->update($request->all());
-                $data = [
-                    'message'=>'Data Updated Success',
-                    'data'=>$updateData
-                ];
-                return Response::send(200,$data);
-            }
+        try {
+            $check = Absensi::where('id',$request->id)->first();
+        if($check){
+            $updateData = Absensi::where('id',$request->id)->update($request->all());
             $data = [
-                "message"=>'Data Not found',
-                "data"=>[]
+                'message'=>'Data Updated Success',
+                'data'=>$updateData
             ];
             return Response::send(200,$data);
-        }catch(Exception $error){
+        }
+        $data = [
+            "message"=>'Data Not found',
+            "data"=>[]
+        ];
+        return Response::send(200,$data);
+    } catch (Exception $error) {
             return Response::send(500,$error->getMessage());
         }
     }
@@ -132,8 +134,8 @@ class KaryawanController extends Controller
      */
     public function destroy(Request $request)
     {
-       try{
-        $check = Karyawan::find($request->id);
+       try {
+        $check = Absensi::find($request->id);
     	if($check){
     	   $check->delete();
     	   $data = [
@@ -147,7 +149,7 @@ class KaryawanController extends Controller
     	   "data"=>[]
     	];
         return Response::send(200,$data);
-    }catch(Exception $error){
+    } catch (Exception $error) {
            return Response::send(500,$error->getMessage());
        }
     }
