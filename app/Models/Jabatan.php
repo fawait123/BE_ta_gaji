@@ -11,4 +11,14 @@ class Jabatan extends Model
     use HasFactory,SoftDeletes;
     protected $dates = ['deleted_at'];
     protected $guarded = ['id'];
+
+    public function potongans()
+    {
+        return $this->hasMany(Potongan::class,'id');
+    }
+
+    public function tunjangans()
+    {
+        return $this->hasMany(Tunjangan::class,'id');
+    }
 }

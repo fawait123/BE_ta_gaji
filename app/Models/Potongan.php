@@ -11,4 +11,14 @@ class Potongan extends Model
     use HasFactory,SoftDeletes;
     protected $dates =['deleted_at'];
     protected $guarded = ['id'];
+
+    public function jabatan()
+    {
+        return $this->belongsTo(Jabatan::class,'jabatan_id');
+    }
+
+    public function komponen()
+    {
+        return $this->belongsTo(Komponen::class,'komponen_id');
+    }
 }
