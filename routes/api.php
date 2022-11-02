@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AbsensiController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\JabatanController;
 use App\Http\Controllers\Api\KaryawanController;
+use App\Http\Controllers\Api\KelolaGajiController;
 use App\Http\Controllers\Api\KomponenController;
 use App\Http\Controllers\Api\PotonganController;
 use App\Http\Controllers\Api\TunjanganController;
@@ -68,9 +69,14 @@ Route::group(['prefix'=>'tunjangan','as'=>'tunjangan'],function(){
 
 
 //api potongan
-Route::group(['prefix'=>'potongan','as'=>'tunjangan'],function(){
+Route::group(['prefix'=>'potongan','as'=>'potongan'],function(){
     Route::get('/',[PotonganController::class,'index']);
     Route::post('/',[PotonganController::class,'store']);
     Route::put('/',[PotonganController::class,'update']);
     Route::delete('/',[PotonganController::class,'destroy']);
+});
+
+//api kelola gaji
+Route::group(['prefix'=>'kelola-gaji','as'=>'kelola-gaji'],function(){
+    Route::post('/',[KelolaGajiController::class,'postMulti']);
 });

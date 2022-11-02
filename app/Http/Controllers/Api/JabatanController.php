@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Helpers\Pagination;
 use App\Helpers\Response;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\JabatanRequest;
 use App\Models\Jabatan;
 use Exception;
 use Illuminate\Http\Request;
@@ -57,9 +58,18 @@ class JabatanController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(JabatanRequest $request)
     {
-        //
+        try{
+            $storeData = Jabatan::create($request->all());
+            $data = [
+                'message'=>'Data Created Success',
+                'data'=>$storeData
+            ];
+            return Response::send(200,$data);
+        }catch(Exception $error){
+            return Response::send(500,$error->getMessage());
+        }
     }
 
     /**
@@ -91,9 +101,26 @@ class JabatanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(JabatanRequest $request)
     {
-        //
+        try{
+            $check = Jabatan::where('id',$request->id)->first();
+            if($check){
+                $updateData = Jabatan::where('id',$request->id)->update($request->all());
+                $data = [
+                    'message'=>'Data Updated Success',
+                    'data'=>$updateData
+                ];
+                return Response::send(200,$data);
+            }
+            $data = [
+                "message"=>'Data Not found',
+                "data"=>[]
+            ];
+            return Response::send(200,$data);
+        }catch(Exception $error){
+            return Response::send(500,$error->getMessage());
+        }
     }
 
     /**
@@ -102,8 +129,25 @@ class JabatanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        try{
+            $check = Jabatan::find($request->id);
+            if($check){
+               $check->delete();
+               $data = [
+                   "message"=>"Data Deleted Success",
+                   "data"=>$check
+               ];
+               return Response::send(200,$data);
+            }
+            $data = [
+               "message"=>"Data Not Found",
+               "data"=>[]
+            ];
+            return Response::send(200,$data);
+        }catch(Exception $error){
+               return Response::send(500,$error->getMessage());
+           }
     }
 }
