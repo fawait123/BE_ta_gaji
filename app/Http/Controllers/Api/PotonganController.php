@@ -5,13 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Helpers\Pagination;
 use App\Helpers\Response;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AbsensiRequest;
-use App\Models\Absensi;
-use App\Models\Karyawan;
+use App\Http\Requests\PotonganRequest;
+use App\Models\Potongan;
 use Exception;
 use Illuminate\Http\Request;
 
-class AbsensiController extends Controller
+class PotonganController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,10 +21,9 @@ class AbsensiController extends Controller
     {
         try{
             $meta = Pagination::defaultMetaInput($request->only(['page','perPage','order','dir','search']));
-            $query = Absensi::query();
-            $query = $query->with('karyawan');
+            $query = Potongan::query();
             $query->where(function($q) use($meta){
-                $q->orWhere('status_kehadiran', 'like', $meta['search'] . '%');
+                $q->orWhere('jumlah', 'like', $meta['search'] . '%');
             });
             $total = $query->count();
             $meta = Pagination::additionalMeta($meta, $total);
@@ -41,7 +39,6 @@ class AbsensiController extends Controller
             return Response::send(200,$data);
         }catch(Exception $error){
             return Response::send(500,$error->getMessage());
-
         }
     }
 
@@ -61,10 +58,10 @@ class AbsensiController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(AbsensiRequest $request)
+    public function store(PotonganRequest $request)
     {
         try{
-            $storeData = Absensi::create($request->all());
+            $storeData = Potongan::create($request->all());
             $data = [
                 'message'=>'Data Created Success',
                 'data'=>$storeData
@@ -104,24 +101,24 @@ class AbsensiController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(PotonganRequest $request)
     {
-        try {
-            $check = Absensi::where('id',$request->id)->first();
-        if($check){
-            $updateData = Absensi::where('id',$request->id)->update($request->all());
+        try{
+            $check = Potongan::where('id',$request->id)->first();
+            if($check){
+                $updateData = Potongan::where('id',$request->id)->update($request->all());
+                $data = [
+                    'message'=>'Data Updated Success',
+                    'data'=>$updateData
+                ];
+                return Response::send(200,$data);
+            }
             $data = [
-                'message'=>'Data Updated Success',
-                'data'=>$updateData
+                "message"=>'Data Not found',
+                "data"=>[]
             ];
             return Response::send(200,$data);
-        }
-        $data = [
-            "message"=>'Data Not found',
-            "data"=>[]
-        ];
-        return Response::send(200,$data);
-    } catch (Exception $error) {
+        }catch(Exception $error){
             return Response::send(500,$error->getMessage());
         }
     }
@@ -134,23 +131,23 @@ class AbsensiController extends Controller
      */
     public function destroy(Request $request)
     {
-       try {
-        $check = Absensi::find($request->id);
-    	if($check){
-    	   $check->delete();
-    	   $data = [
-    	       "message"=>"Data Deleted Success",
-    	       "data"=>$check
-           ];
-           return Response::send(200,$data);
-    	}
-    	$data = [
-    	   "message"=>"Data Not Found",
-    	   "data"=>[]
-    	];
-        return Response::send(200,$data);
-    } catch (Exception $error) {
-           return Response::send(500,$error->getMessage());
-       }
+        try{
+            $check = Potongan::find($request->id);
+            if($check){
+               $check->delete();
+               $data = [
+                   "message"=>"Data Deleted Success",
+                   "data"=>$check
+               ];
+               return Response::send(200,$data);
+            }
+            $data = [
+               "message"=>"Data Not Found",
+               "data"=>[]
+            ];
+            return Response::send(200,$data);
+        }catch(Exception $error){
+               return Response::send(500,$error->getMessage());
+           }
     }
 }

@@ -5,6 +5,8 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\JabatanController;
 use App\Http\Controllers\Api\KaryawanController;
 use App\Http\Controllers\Api\KomponenController;
+use App\Http\Controllers\Api\PotonganController;
+use App\Http\Controllers\Api\TunjanganController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -53,4 +55,22 @@ Route::group(['prefix'=>'absen','as'=>'absen'],function(){
     Route::post('/',[AbsensiController::class,'store']);
     Route::put('/',[AbsensiController::class,'update']);
     Route::delete('/',[AbsensiController::class,'destroy']);
+});
+
+
+//api tunjangan
+Route::group(['prefix'=>'tunjangan','as'=>'tunjangan'],function(){
+    Route::get('/',[TunjanganController::class,'index']);
+    Route::post('/',[TunjanganController::class,'store']);
+    Route::put('/',[TunjanganController::class,'update']);
+    Route::delete('/',[TunjanganController::class,'destroy']);
+});
+
+
+//api potongan
+Route::group(['prefix'=>'potongan','as'=>'tunjangan'],function(){
+    Route::get('/',[PotonganController::class,'index']);
+    Route::post('/',[PotonganController::class,'store']);
+    Route::put('/',[PotonganController::class,'update']);
+    Route::delete('/',[PotonganController::class,'destroy']);
 });
