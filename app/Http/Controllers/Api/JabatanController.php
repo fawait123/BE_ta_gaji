@@ -22,9 +22,13 @@ class JabatanController extends Controller
         try{
             $meta = Pagination::defaultMetaInput($request->only(['page','perPage','order','dir','search']));
             $query = Jabatan::query();
+            $query = $query->with(['tunjangans.komponen','potongans.komponen']);
             $query->where(function($q) use($meta){
                 $q->orWhere('nama', 'like', $meta['search'] . '%');
             });
+            if($meta['filterID']!= ''){
+                $query->where('id',$meta['filterID']);
+            }
             $total = $query->count();
             $meta = Pagination::additionalMeta($meta, $total);
             if ($meta['perPage'] != '-1') {

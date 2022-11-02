@@ -10,6 +10,7 @@ class Pagination
         $order = $input['order'] ?? 'created_at';
         $dir = $input['dir'] ?? 'desc';
         $search = isset($input['search']) ? ($input['search']) : '';
+        $filter = isset($input['filterID']) ? ($input['filterID']):'';
         $offset = ($page - 1) * $perPage;
         return [
             'order'     => $order,
@@ -18,6 +19,7 @@ class Pagination
             'perPage'   => $perPage,
             'offset'    => $offset,
             'search'    => $search,
+            'filterID'  => $filter
         ];
     }
 
