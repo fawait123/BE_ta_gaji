@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\Response;
 use App\Http\Controllers\Api\AbsensiController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\JabatanController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\Api\KelolaGajiController;
 use App\Http\Controllers\Api\KomponenController;
 use App\Http\Controllers\Api\PotonganController;
 use App\Http\Controllers\Api\TunjanganController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,7 +29,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // api karyawan
-Route::group(['prefix'=>'karyawan','as'=>'karyawan'],function(){
+Route::group(['prefix'=>'karyawan','as'=>'karyawan','middleware'=>'auth:api'],function(){
     Route::get('/',[KaryawanController::class,'index']);
     Route::post('/',[KaryawanController::class,'store']);
     Route::put('/',[KaryawanController::class,'update']);
@@ -35,7 +37,7 @@ Route::group(['prefix'=>'karyawan','as'=>'karyawan'],function(){
 });
 
 // api jabatan
-Route::group(['prefix'=>'jabatan','as'=>'jabatan'],function(){
+Route::group(['prefix'=>'jabatan','as'=>'jabatan','middleware'=>'auth:api'],function(){
     Route::get('/',[JabatanController::class,'index']);
     Route::post('/',[JabatanController::class,'store']);
     Route::put('/',[JabatanController::class,'update']);
@@ -43,7 +45,7 @@ Route::group(['prefix'=>'jabatan','as'=>'jabatan'],function(){
 });
 
 // api komponent
-Route::group(['prefix'=>'komponen','as'=>'komponen'],function(){
+Route::group(['prefix'=>'komponen','as'=>'komponen','middleware'=>'auth:api'],function(){
     Route::get('/',[KomponenController::class,'index']);
     Route::post('/',[KomponenController::class,'store']);
     Route::put('/',[KomponenController::class,'update']);
@@ -51,7 +53,7 @@ Route::group(['prefix'=>'komponen','as'=>'komponen'],function(){
 });
 
 //api absensi
-Route::group(['prefix'=>'absen','as'=>'absen'],function(){
+Route::group(['prefix'=>'absen','as'=>'absen','middleware'=>'auth:api'],function(){
     Route::get('/',[AbsensiController::class,'index']);
     Route::post('/',[AbsensiController::class,'store']);
     Route::put('/',[AbsensiController::class,'update']);
@@ -60,7 +62,7 @@ Route::group(['prefix'=>'absen','as'=>'absen'],function(){
 
 
 //api tunjangan
-Route::group(['prefix'=>'tunjangan','as'=>'tunjangan'],function(){
+Route::group(['prefix'=>'tunjangan','as'=>'tunjangan','middleware'=>'auth:api'],function(){
     Route::get('/',[TunjanganController::class,'index']);
     Route::post('/',[TunjanganController::class,'store']);
     Route::put('/',[TunjanganController::class,'update']);
@@ -69,14 +71,34 @@ Route::group(['prefix'=>'tunjangan','as'=>'tunjangan'],function(){
 
 
 //api potongan
-Route::group(['prefix'=>'potongan','as'=>'potongan'],function(){
+Route::group(['prefix'=>'potongan','as'=>'potongan','middleware'=>'auth:api'],function(){
     Route::get('/',[PotonganController::class,'index']);
     Route::post('/',[PotonganController::class,'store']);
     Route::put('/',[PotonganController::class,'update']);
     Route::delete('/',[PotonganController::class,'destroy']);
 });
 
+//api user
+Route::group(['prefix'=>'user','as'=>'user','middleware'=>'auth:api'],function(){
+    Route::get('/',[UserController::class,'index']);
+    Route::post('/',[UserController::class,'store']);
+    Route::put('/',[UserController::class,'update']);
+    Route::delete('/',[UserController::class,'destroy']);
+});
+
 //api kelola gaji
-Route::group(['prefix'=>'kelola-gaji','as'=>'kelola-gaji'],function(){
+Route::group(['prefix'=>'kelola-gaji','as'=>'kelola-gaji','middleware'=>'auth:api'],function(){
     Route::post('/',[KelolaGajiController::class,'postMulti']);
 });
+
+// api login
+Route::post('login',[AuthController::class,'login'])->name('login');
+Route::post('register',[AuthController::class,'register']);
+
+Route::get('unauthorized',function(){
+    $data = [
+        'message'=>'Unauthorized',
+        'data'=>[]
+    ];
+    return Response::send(401,$data);
+})->name('unauthorized');
