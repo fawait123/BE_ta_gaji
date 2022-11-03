@@ -5,12 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Helpers\Pagination;
 use App\Helpers\Response;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\JabatanRequest;
-use App\Models\Jabatan;
+use App\Http\Requests\UserRequest;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 
-class JabatanController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,11 +21,7 @@ class JabatanController extends Controller
     {
         try{
             $meta = Pagination::defaultMetaInput($request->only(['page','perPage','order','dir','search']));
-            $query = Jabatan::query();
-            $query = $query->with(['tunjangans.komponen','potongans.komponen']);
-            if($request->filled('filterID')){
-                $query = $query->where('id',$request->filterID);
-            }
+            $query = User::query();
             $query->where(function($q) use($meta){
                 $q->orWhere('nama', 'like', $meta['search'] . '%');
             });
@@ -53,7 +49,7 @@ class JabatanController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -62,10 +58,10 @@ class JabatanController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(JabatanRequest $request)
+    public function store(UserRequest $request)
     {
         try{
-            $storeData = Jabatan::create($request->all());
+            $storeData = User::create($request->all());
             $data = [
                 'message'=>'Data Created Success',
                 'data'=>$storeData
@@ -105,12 +101,12 @@ class JabatanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(JabatanRequest $request)
+    public function update(UserRequest $request)
     {
         try{
-            $check = Jabatan::where('id',$request->id)->first();
+            $check = User::where('id',$request->id)->first();
             if($check){
-                $updateData = Jabatan::where('id',$request->id)->update($request->all());
+                $updateData = User::where('id',$request->id)->update($request->all());
                 $data = [
                     'message'=>'Data Updated Success',
                     'data'=>$updateData
@@ -136,7 +132,7 @@ class JabatanController extends Controller
     public function destroy(Request $request)
     {
         try{
-            $check = Jabatan::find($request->id);
+            $check = User::find($request->id);
             if($check){
                $check->delete();
                $data = [

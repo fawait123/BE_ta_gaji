@@ -27,16 +27,19 @@ class KelolaGajiController extends Controller
                 unset($key['id']);
                 array_push($key);
             }else{
-                $check = Tunjangan::find($key['id']);
-                $check->komponen_id = $key['komponen_id'];
-                $check->jabatan_id = $key['jabatan_id'];
-                $check->jumlah = $key['jumlah'];
-                $check->save();
-                array_push($result,[
-                    'komponen_id'=>$check['komponen_id'],
-                    'jabatan_id'=>$request['jabatan_id'],
-                    'jumlah'=>$check['jumlah'],
-                ]);
+                $check = Tunjangan::where('id',$key['id'])->first();
+                if($check){
+                    Tunjangan::where('id',$key['id'])->update([
+                        "komponen_id"=>$key['komponen_id'],
+                        "jabatan_id"=>$request['jabatan_id'],
+                        "jumlah"=>$key['jumlah'],
+                    ]);
+                    array_push($result,[
+                        'komponen_id'=>$check['komponen_id'],
+                        'jabatan_id'=>$request['jabatan_id'],
+                        'jumlah'=>$check['jumlah'],
+                    ]);
+                }
             }
         }
         // pengurangan
@@ -50,16 +53,19 @@ class KelolaGajiController extends Controller
                 unset($key['id']);
                 array_push($key);
             }else{
-                $check = Potongan::find($key['id']);
-                $check->komponen_id = $key['komponen_id'];
-                $check->jabatan_id = $key['jabatan_id'];
-                $check->jumlah = $key['jumlah'];
-                $check->save();
-                array_push($result,[
-                    'komponen_id'=>$check['komponen_id'],
-                    'jabatan_id'=>$request['jabatan_id'],
-                    'jumlah'=>$check['jumlah'],
-                ]);
+                $check = Potongan::where('id',$key['id'])->first();
+                if($check){
+                    Potongan::where('id',$key['id'])->update([
+                        "komponen_id"=>$key['komponen_id'],
+                        "jabatan_id"=>$request['jabatan_id'],
+                        "jumlah"=>$key['jumlah'],
+                    ]);
+                    array_push($result,[
+                        'komponen_id'=>$check['komponen_id'],
+                        'jabatan_id'=>$request['jabatan_id'],
+                        'jumlah'=>$check['jumlah'],
+                    ]);
+                }
             }
         }
         $dataResult = [
