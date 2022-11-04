@@ -6,8 +6,10 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\JabatanController;
 use App\Http\Controllers\Api\KaryawanController;
 use App\Http\Controllers\Api\KelolaGajiController;
+use App\Http\Controllers\Api\KeluargaController;
 use App\Http\Controllers\Api\KomponenController;
 use App\Http\Controllers\Api\PotonganController;
+use App\Http\Controllers\Api\RunPayrollController;
 use App\Http\Controllers\Api\TunjanganController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
@@ -78,6 +80,14 @@ Route::group(['prefix'=>'potongan','as'=>'potongan','middleware'=>'auth:api'],fu
     Route::delete('/',[PotonganController::class,'destroy']);
 });
 
+//api keluarga
+Route::group(['prefix'=>'keluarga','as'=>'keluarga','middleware'=>'auth:api'],function(){
+    Route::get('/',[KeluargaController::class,'index']);
+    Route::post('/',[KeluargaController::class,'store']);
+    Route::put('/',[KeluargaController::class,'update']);
+    Route::delete('/',[KeluargaController::class,'destroy']);
+});
+
 //api user
 Route::group(['prefix'=>'user','as'=>'user','middleware'=>'auth:api'],function(){
     Route::get('/',[UserController::class,'index']);
@@ -90,6 +100,9 @@ Route::group(['prefix'=>'user','as'=>'user','middleware'=>'auth:api'],function()
 Route::group(['prefix'=>'kelola-gaji','as'=>'kelola-gaji','middleware'=>'auth:api'],function(){
     Route::post('/',[KelolaGajiController::class,'postMulti']);
 });
+
+// run payroll
+Route::post('run-payroll',[RunPayrollController::class,'run']);
 
 // api login
 Route::post('login',[AuthController::class,'login'])->name('login');
