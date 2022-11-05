@@ -9,6 +9,7 @@ use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -61,7 +62,14 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         try{
-            $storeData = User::create($request->all());
+            $storeData = User::create([
+                'nama'=>$request->nama,
+                'email'=>$request->email,
+                'username'=>$request->username,
+                'password'=>Hash::make($request->password),
+                'role'=>$request->role,
+                'foto'=>$request->foto,
+            ]);
             $data = [
                 'message'=>'Data Created Success',
                 'data'=>$storeData
@@ -104,9 +112,27 @@ class UserController extends Controller
     public function update(UserRequest $request)
     {
         try{
+            if($request->filled('password')){
+                $data = [
+                    'nama'=>$request->nama,
+                    'email'=>$request->email,
+                    'username'=>$request->username,
+                    'password'=>Hash::make($request->password),
+                    'role'=>$request->role,
+                    'foto'=>$request->foto,
+                ];
+            }else{
+                $data = [
+                    'nama'=>$request->nama,
+                    'email'=>$request->email,
+                    'username'=>$request->username,
+                    'role'=>$request->role,
+                    'foto'=>$request->foto,
+                ];
+            }
             $check = User::where('id',$request->id)->first();
             if($check){
-                $updateData = User::where('id',$request->id)->update($request->all());
+                $updateData = User::where('id',$request->id)->update($data);
                 $data = [
                     'message'=>'Data Updated Success',
                     'data'=>$updateData

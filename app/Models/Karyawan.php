@@ -12,4 +12,9 @@ class Karyawan extends Model
 
     protected $dates = ['deleted_at'];
     protected $guarded = ['id'];
+
+    public function jabatan()
+    {
+        return $this->belongsTo(Jabatan::class,'jabatan_id');
+    }
 }

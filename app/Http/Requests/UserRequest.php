@@ -25,13 +25,19 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules =  [
             'nama'=>'required',
             'email'=>'required|email',
             'password'=>'required',
             'username'=>'required',
             'role'=>'required'
         ];
+
+        if (in_array($this->method(), ['PATCH', 'PUT'])) {
+            unset($rules['password']);
+        }
+
+        return $rules;
     }
 
     public function messages()
