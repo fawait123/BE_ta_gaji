@@ -14,11 +14,11 @@ class Jabatan extends Model
 
     public function potongans()
     {
-        return $this->hasMany(Potongan::class,'id');
+        return $this->hasMany(Potongan::class,'jabatan_id');
     }
 
     public function tunjangans()
     {
-        return $this->hasMany(Tunjangan::class,'id');
+        return $this->hasMany(Tunjangan::class,'jabatan_id');
     }
 }

@@ -23,6 +23,7 @@ class KaryawanController extends Controller
         try{
             $meta = Pagination::defaultMetaInput($request->only(['page','perPage','order','dir','search']));
             $query = Karyawan::query();
+            $query = $query->with(['jabatan']);
             $query->where(function($q) use($meta){
                 $q->orWhere('nama', 'like', $meta['search'] . '%');
             });
