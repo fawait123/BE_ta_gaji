@@ -6,8 +6,10 @@ use App\Helpers\Response;
 use App\Http\Controllers\Controller;
 use App\Models\Potongan;
 use App\Models\Tunjangan;
+use App\Models\Penggajian;
 use Exception;
 use Illuminate\Http\Request;
+use App\Helpers\Pagination;
 
 class KelolaGajiController extends Controller
 {
@@ -75,6 +77,34 @@ class KelolaGajiController extends Controller
         return Response::send(200,$dataResult);
         } catch (Exception $error) {
             Response::send(500,$error->getMessage());
+        }
+    }
+
+    public function index(Request $request){
+        try {
+            $meta = Pagination::defaultMetaInput($request->only(['page','perPage','order','dir','search']));
+            $query = Penggajian::query();
+            $query = $query->with(['karyawan']);
+            if($request->filled('start_date') && $request->filled('end_date')){
+                $query = $query->whereBetween('tgl_penggajian', [$request->start_date, $request->end_date]);
+            }
+            $query->where(function($q) use($meta){
+                $q->orWhere('total_gaji', 'like', $meta['search'] . '%');
+            });
+            $total = $query->count();
+            $meta = Pagination::additionalMeta($meta, $total);
+            if ($meta['perPage'] != '-1') {
+                $query->offset($meta['offset'])->limit($meta['perPage']);
+            }
+            $results = $query->get();
+            $data = [
+                'message'  => 'List Data Karyawan',
+                'results'  => $results,
+                'meta'     =>  $meta
+            ];
+            return Response::send(200,$data);
+        } catch (Exception $error) {
+            return Response::send(500, $error->getMessage());
         }
     }
 }

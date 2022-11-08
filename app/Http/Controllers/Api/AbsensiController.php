@@ -24,6 +24,9 @@ class AbsensiController extends Controller
             $meta = Pagination::defaultMetaInput($request->only(['page','perPage','order','dir','search']));
             $query = Absensi::query();
             $query = $query->with('karyawan');
+            if($request->filled('start_date') && $request->filled('end_date')){
+                $query = $query->whereBetween('tgl_absen', [$request->start_date, $request->end_date]);
+            }
             $query->where(function($q) use($meta){
                 $q->orWhere('status_kehadiran', 'like', $meta['search'] . '%');
             });
