@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\KeluargaController;
 use App\Http\Controllers\Api\KomponenController;
 use App\Http\Controllers\Api\PotonganController;
 use App\Http\Controllers\Api\RunPayrollController;
+use App\Http\Controllers\Api\LaporanController;
 use App\Http\Controllers\Api\TunjanganController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
@@ -99,7 +100,16 @@ Route::group(['prefix'=>'user','as'=>'user','middleware'=>'auth:api'],function()
 //api kelola gaji
 Route::group(['prefix'=>'kelola-gaji','as'=>'kelola-gaji','middleware'=>'auth:api'],function(){
     Route::post('/',[KelolaGajiController::class,'postMulti']);
+    Route::get('/',[KelolaGajiController::class,'index']);
 });
+
+// report
+Route::group(['prefix'=>'laporan','as'=>'laporan','middleware'=>'auth:api'],function(){
+    Route::get('/gaji',[LaporanController::class,'gaji']);
+    Route::get('/absen',[LaporanController::class,'absen']);
+    Route::get('/slip',[LaporanController::class,'slip']);
+});
+
 
 // run payroll
 Route::post('run-payroll',[RunPayrollController::class,'run']);
