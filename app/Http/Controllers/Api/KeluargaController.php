@@ -22,7 +22,7 @@ class KeluargaController extends Controller
         try{
             $meta = Pagination::defaultMetaInput($request->only(['page','perPage','order','dir','search']));
             $query = Keluarga::query();
-            $query = $query->with(['tunjangans.komponen','potongans.komponen']);
+            $query = $query->with('karyawan');
 
             $query->where(function($q) use($meta){
                 $q->orWhere('nama', 'like', $meta['search'] . '%');

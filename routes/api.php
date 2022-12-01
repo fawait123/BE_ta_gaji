@@ -34,6 +34,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // api karyawan
 Route::group(['prefix'=>'karyawan','as'=>'karyawan','middleware'=>'auth:api'],function(){
     Route::get('/',[KaryawanController::class,'index']);
+    Route::get('/detail',[KaryawanController::class,'show']);
     Route::post('/',[KaryawanController::class,'store']);
     Route::put('/',[KaryawanController::class,'update']);
     Route::delete('/',[KaryawanController::class,'destroy']);

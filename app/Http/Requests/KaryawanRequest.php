@@ -26,7 +26,10 @@ class KaryawanRequest extends FormRequest
     public function rules()
     {
         return [
-            'id_karyawan'=>'required',
+            // 'id_karyawan'=>'required',
+            'no_sk'=>'required',
+            'no_rek'=>'required',
+            'nama_bank'=>'required',
             'jabatan_id'=>'required',
             'nama'=>'required',
             'jenis_kelamin'=>'required',
@@ -47,6 +50,9 @@ class KaryawanRequest extends FormRequest
             'alamat.required'=>'Alamat required',
             'tgl_lahir.required'=>'Tanggal Lahir required',
             'tgl_masuk_kerja.required'=>'Tanggal Masuk Kerja required',
+            'no_sk.required'=>'NO SK required',
+            'nama_bank.required'=>'Nama Bank required',
+            'no_rek.required'=>'NO Rekening required',
         ];
     }
 

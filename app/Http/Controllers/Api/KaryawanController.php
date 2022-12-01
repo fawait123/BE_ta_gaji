@@ -80,9 +80,22 @@ class KaryawanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+        $karyawan = Karyawan::find($request->id);
+        if($karyawan){
+            $data = [
+                'message'=>'Success',
+                'data'=>$karyawan
+            ];
+
+            return Response::send(200,$data);
+        }
+        $data = [
+            'message'=>'Not found',
+            'data'=>null
+        ];
+        return Response::send(200,$data);
     }
 
     /**
@@ -91,7 +104,7 @@ class KaryawanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
         //
     }
