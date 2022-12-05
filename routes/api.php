@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\RunPayrollController;
 use App\Http\Controllers\Api\LaporanController;
 use App\Http\Controllers\Api\TunjanganController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\DashboardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -111,6 +112,10 @@ Route::group(['prefix'=>'laporan','as'=>'laporan','middleware'=>'auth:api'],func
     Route::get('/slip',[LaporanController::class,'slip']);
 });
 
+// route dashboard
+Route::group(['prefix'=>'dashboard'],function(){
+    Route::get('/',[DashboardController::class,'dashboard']);
+});
 
 // run payroll
 Route::post('run-payroll',[RunPayrollController::class,'run']);
