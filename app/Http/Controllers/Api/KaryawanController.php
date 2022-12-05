@@ -82,7 +82,7 @@ class KaryawanController extends Controller
      */
     public function show(Request $request)
     {
-        $karyawan = Karyawan::find($request->id);
+        $karyawan = Karyawan::with(['keluargas','jabatan'])->find($request->id);
         if($karyawan){
             $data = [
                 'message'=>'Success',
