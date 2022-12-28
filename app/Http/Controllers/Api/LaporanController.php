@@ -37,7 +37,7 @@ class LaporanController extends Controller
         $pdf = Pdf::loadView('pdf.absen',[
             'data'=>$data
         ]);
-        return $pdf->download('laporan-absen.pdf');
+        return $pdf->download('laporan-absensi.pdf');
     }
 
     public function slip(Request $request)

@@ -47,6 +47,7 @@ class AuthController extends Controller
                 'message'=>'Login success',
                 'data'=>[
                     "token"=>$resultToken->accessToken,
+                    'data'=>$check,
                     'exp'=>Carbon::parse($token->expires_at)->toDateTimeString()
                 ]
             ];

@@ -48,8 +48,8 @@
             <tr>
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ date('d M Y', strtotime($item->tgl_absen)) }}</td>
-                <td>{{ $item->karyawan->nama }}</td>
-                <td>{{ $item->karyawan->jabatan->nama }}</td>
+                <td>{{ $item->karyawan->nama ?? '' }}</td>
+                <td>{{ $item->karyawan->jabatan->nama ?? '' }}</td>
                 <td>{{ $item->jam_masuk }}</td>
                 <td>{{ $item->jam_pulang }}</td>
                 <td>{{ $item->status_kehadiran }}</td>

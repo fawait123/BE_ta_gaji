@@ -11,6 +11,7 @@ use App\Models\Potongan;
 use App\Models\Tunjangan;
 use App\Models\Keluarga;
 use Illuminate\Http\Request;
+use Carbon\CarbonPeriod;
 
 class RunPayrollController extends Controller
 {
@@ -24,7 +25,7 @@ class RunPayrollController extends Controller
             // grouping tunjangan karyawan
             // cari tunjangan
             $queryAllowance = Tunjangan::where('jabatan_id',$key->jabatan_id)->whereHas('komponen',function($q){
-                $q->where('nama','not like','%istri%')->where('nama','not like','%anak%');
+                $q->where('nama','not like','%istri%')->where('nama','not like','%anak%')->where('nama','not like','%suami%');
             })->get();
             foreach($queryAllowance as $allowance){
                 $total_allowance += $allowance->jumlah;
@@ -36,7 +37,7 @@ class RunPayrollController extends Controller
             }
 
             // cari keluarga istri
-            $queryIstri = Keluarga::where('karyawan_id',$key->jabatan_id)->where('jenis','like','%istri%')->get();
+            $queryIstri = Keluarga::where('karyawan_id',$key->jabatan_id)->where('jenis','like','%istri%')->orWhere('jenis','like','%suami%')->get();
             foreach($queryIstri as $allowance){
                 $komponenIstri = Tunjangan::whereHas('komponen',function($q){
                     $q->where('nama','like','%istri%');
@@ -54,18 +55,21 @@ class RunPayrollController extends Controller
 
             // cari keluarga anak
             $queryAnak = Keluarga::where('karyawan_id',$key->jabatan_id)->where('jenis','like','%anak%')->get();
-            foreach($queryIstri as $allowance){
-                $komponenAnak = Tunjangan::whereHas('komponen',function($q){
-                    $q->where('nama','like','%anak%');
-                })->first();
-                $tunjanganAnak = $komponenAnak ? $komponenAnak->jumlah :0;
-                $total_allowance += $tunjanganAnak;
-                if($komponenAnak){
-                    array_push($data,[
-                        "komponen_id"=>$komponenAnak->komponen_id,
-                        "tipe"=>"Penambahan",
-                        "jumlah"=>$komponenAnak->jumlah,
-                    ]);
+            foreach($queryAnak as $allowance){
+                $umur = $this->getRange($allowance->tgl_lahir,date('Y-m-d'));
+                if(count($umur)<=20){
+                    $komponenAnak = Tunjangan::whereHas('komponen',function($q){
+                        $q->where('nama','like','%anak%');
+                    })->first();
+                    $tunjanganAnak = $komponenAnak ? $komponenAnak->jumlah :0;
+                    $total_allowance += $tunjanganAnak;
+                    if($komponenAnak){
+                        array_push($data,[
+                            "komponen_id"=>$komponenAnak->komponen_id,
+                            "tipe"=>"Penambahan",
+                            "jumlah"=>$komponenAnak->jumlah,
+                        ]);
+                    }
                 }
             }
 
@@ -98,5 +102,10 @@ class RunPayrollController extends Controller
             }
         }
         return Response::send(200,['message'=>'Run Payroll Berhasil','data'=>$karyawan]);
+    }
+
+    public function getRange($start,$end)
+    {
+        return CarbonPeriod::create($start,$end);
     }
 }

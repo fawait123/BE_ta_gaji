@@ -15,18 +15,31 @@
             TAMSIL</span>
         <span style="font-size: 15px; font-weight:bold;display:block;text-align:center;">PAMONG KELURAHAN DAN DUKUH
             SINDUADI</span>
-        <span style="font-size: 15px; font-weight:bold;display:block;text-align:center; margin-bottom:5px;">BULAN APPRIL
-            2022</span>
+        <span style="font-size: 15px; font-weight:bold;display:block;text-align:center; margin-bottom:5px;">BULAN
+            <span style="text-transform: uppercase">{{ date('F', strtotime($penggajian->tgl_penggajian)) }}</span>
+            {{ date('Y', strtotime($penggajian->tgl_penggajian)) }}</span>
         <div style="border-bottom: 1px solid black"></div>
         <div style="position: relative;">
             <div style="margin-top:10px;">
                 <div style="width: 120px;display:inline-block;font-weight:bold;">NAMA : </div>
-                <div style="display: inline-block;font-weight:bold;">{{ strtoupper($penggajian->karyawan->nama) }}</div>
+                <div style="display: inline-block;font-weight:bold;">{{ strtoupper($penggajian->karyawan->nama ?? '') }}
+                </div>
+            </div>
+            <div style="margin-top:10px;">
+                <div style="width: 120px;display:inline-block;font-weight:bold;">NAMA BANK : </div>
+                <div style="display: inline-block;font-weight:bold;">
+                    {{ strtoupper($penggajian->karyawan->nama_bank ?? '') }}
+                </div>
             </div>
             <div style="position: absolute; right: 0;top:0;">
                 <div style="width: 120px;display:inline-block;font-weight:bold;">JABATAN : </div>
                 <div style="display: inline-block;font-weight:bold;">
-                    {{ strtoupper($penggajian->karyawan->jabatan->nama) }}</div>
+                    {{ strtoupper($penggajian->karyawan->jabatan->nama ?? '') }}</div>
+            </div>
+            <div style="position: absolute; right: 0;top:20;">
+                <div style="width: 120px;display:inline-block;font-weight:bold;">NO REK : </div>
+                <div style="display: inline-block;font-weight:bold;">
+                    {{ strtoupper($penggajian->karyawan->no_rek ?? '') }}</div>
             </div>
         </div>
         <ol type="A">
@@ -34,7 +47,7 @@
                 <div style="position: relative">
                     <ol type="1">
                         @foreach ($penggajian->karyawan->jabatan->tunjangans as $item)
-                            <li>{{ $item->komponen->nama }}</li>
+                            <li>{{ $item->komponen->nama ?? '' }}</li>
                         @endforeach
                     </ol>
                     <div style="position: absolute;top:0;right:0;">
@@ -86,7 +99,7 @@
             <br>
             <br>
             <br>
-            <span>{{ strtoupper($penggajian->karyawan->nama) }}</span>
+            <span>{{ strtoupper($penggajian->karyawan->nama ?? '') }}</span>
         </div>
         <div style="position: absolute;top:0;right:0;">
             <span style="display:block">Sinduadi, {{ date('d M Y') }}</span>
