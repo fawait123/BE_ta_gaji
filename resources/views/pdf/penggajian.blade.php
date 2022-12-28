@@ -48,8 +48,8 @@
             <tr>
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ date('d M Y', strtotime($item->tgl_penggajian)) }}</td>
-                <td>{{ $item->karyawan->nama }}</td>
-                <td>{{ $item->karyawan->jabatan->nama }}</td>
+                <td>{{ $item->karyawan->nama ?? '' }}</td>
+                <td>{{ $item->karyawan->jabatan->nama ?? '' }}</td>
                 <td>{{ $item->total_tunjangan }}</td>
                 <td>{{ $item->total_pengurangan }}</td>
                 <td>{{ $item->total_gaji }}</td>
