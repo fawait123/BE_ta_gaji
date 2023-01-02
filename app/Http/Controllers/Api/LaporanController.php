@@ -10,6 +10,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class LaporanController extends Controller
 {
+    // tes
     public function gaji(Request $request)
     {
         $data = Penggajian::query();
