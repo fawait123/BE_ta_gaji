@@ -41,7 +41,7 @@ class RunPayrollController extends Controller
                 $queryIstri = Keluarga::where('karyawan_id',$key->jabatan_id)->where('jenis','like','%istri%')->orWhere('jenis','like','%suami%')->get();
                 foreach($queryIstri as $allowance){
                     $komponenIstri = Tunjangan::whereHas('komponen',function($q){
-                        $q->where('nama','like','%istri%')->orWhere('jenis','like','%suami%');
+                        $q->where('nama','like','%istri%')->orWhere('nama','like','%suami%');
                     })->first();
                     $tunjanganIstri = $komponenIstri ? $komponenIstri->jumlah : 0;
                     $total_allowance += $tunjanganIstri;
