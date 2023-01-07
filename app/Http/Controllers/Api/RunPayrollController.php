@@ -55,7 +55,7 @@ class RunPayrollController extends Controller
                 }
 
                 // cari keluarga anak
-                $queryAnak = Keluarga::where('karyawan_id',$key->jabatan_id)->where('jenis','like','%anak%')->get();
+                $queryAnak = Keluarga::where('karyawan_id',$key->jabatan_id)->where('jenis','like','%anak%')->take(2)->get();
                 foreach($queryAnak as $allowance){
                     $umur = $this->getRange($allowance->tgl_lahir,date('Y-m-d'));
                     if(count($umur)<=7300){
