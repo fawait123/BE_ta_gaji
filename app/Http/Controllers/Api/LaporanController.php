@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Absensi;
 use App\Models\Penggajian;
+use App\Models\Karyawan;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class LaporanController extends Controller
@@ -28,15 +29,41 @@ class LaporanController extends Controller
 
     public function absen(Request $request)
     {
-        $data = Absensi::query();
-        $data = $data->with(['karyawan.jabatan']);
-        if($request->filled('start_date') && $request->filled('end_date')){
-            $data = $data->whereBetween('tgl_absen',[$request->start_date,$request->end_date]);
-        }
+        $data = [];
+        $karyawan = Karyawan::with('jabatan')->all();
+        foreach($karyawan as $kary)
+        {
+            $absen = Absensi::query();
+            if($request->filled('start_date') && $request->filled('end_date')){
+                $absen = $absen->whereBetween('tgl_absen',[$request->start_date,$request->end_date]);
+            }
 
-        $data = $data->get();
+            $sakit = $absen->where('status_kehadiran','like','%sakit%')->count();
+            $hadir = $absen->where('status_kehadiran','like','%hadir%')->count();
+            $alpha = $absen->where('status_kehadiran','like','%alpha%')->count();
+            $ijin = $absen->where('status_kehadiran','like','%ijin%')->count();
+
+            array_push($data,[
+                'nama'=>$kary->nama ?? '',
+                'jabatan'=>$kary->jabatan->nama ?? '',
+                'sakit'=>$sakit ?? '',
+                'hadir'=>$hadir ?? '',
+                'alpha'=>$alpha ?? '',
+                'ijin'=>$ijin ?? '',
+            ]);
+
+        }
+        // $data = Absensi::query();
+        // $data = $data->with(['karyawan.jabatan']);
+        // if($request->filled('start_date') && $request->filled('end_date')){
+        //     $data = $data->whereBetween('tgl_absen',[$request->start_date,$request->end_date]);
+        // }
+
+        // $data = $data->get();
         $pdf = Pdf::loadView('pdf.absen',[
-            'data'=>$data
+            'data'=>$data,
+            'start_date'=>$request->start_date,
+            'end_date'=>$request->end_date
         ]);
         return $pdf->download('laporan-absensi.pdf');
     }

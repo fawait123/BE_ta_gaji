@@ -33,26 +33,25 @@
 </style>
 
 <body>
-    <h1 style="text-align: center;">Laporan Absensi</h1>
+    <h1 style="text-align: center;">Laporan Absensi Tanggal {{ date('d M Y', strtotime($start_date)) }} -
+        {{ date('d M Y', strtotime($end_date)) }}</h1>
     <table>
         <tr>
             <th>NO</th>
-            <th>Tanggal</th>
             <th>Nama Karyawan</th>
             <th>Jabatan</th>
-            <th>Jam Masuk</th>
-            <th>Jam Keluar</th>
-            <th>Status</th>
+            <th>Sakit</th>
+            <th>Ijin</th>
+            <th>Alpha</th>
         </tr>
         @foreach ($data as $item)
             <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>{{ date('d M Y', strtotime($item->tgl_absen)) }}</td>
-                <td>{{ $item->karyawan->nama ?? '' }}</td>
-                <td>{{ $item->karyawan->jabatan->nama ?? '' }}</td>
-                <td>{{ $item->jam_masuk }}</td>
-                <td>{{ $item->jam_pulang }}</td>
-                <td>{{ $item->status_kehadiran }}</td>
+                <td>{{ $item['nama'] ?? '' }}</td>
+                <td>{{ $item['jabatan'] ?? '' }}</td>
+                <td>{{ $item['sakit'] }}</td>
+                <td>{{ $item['ijin'] }}</td>
+                <td>{{ $item['alpha'] }}</td>
             </tr>
         @endforeach
     </table>
