@@ -63,7 +63,7 @@ class UserController extends Controller
     {
         try{
             $storeData = User::create([
-                'nama'=>$request->nama,
+                'nama'=>$request->nama ?? '',
                 'email'=>$request->email,
                 'username'=>$request->username,
                 'password'=>Hash::make($request->password),
