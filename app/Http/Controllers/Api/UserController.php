@@ -114,7 +114,7 @@ class UserController extends Controller
         try{
             if($request->filled('password')){
                 $data = [
-                    'nama'=>$request->nama,
+                    'nama'=>$request->nama ?? '',
                     'email'=>$request->email,
                     'username'=>$request->username,
                     'password'=>Hash::make($request->password),
@@ -123,7 +123,7 @@ class UserController extends Controller
                 ];
             }else{
                 $data = [
-                    'nama'=>$request->nama,
+                    'nama'=>$request->nama ?? '',
                     'email'=>$request->email,
                     'username'=>$request->username,
                     'role'=>$request->role,

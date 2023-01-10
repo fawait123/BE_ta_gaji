@@ -26,7 +26,7 @@ class UserRequest extends FormRequest
     public function rules()
     {
         $rules =  [
-            'nama'=>'required',
+            // 'nama'=>'required',
             'email'=>'required|email',
             'password'=>'required',
             'username'=>'required',
@@ -43,7 +43,7 @@ class UserRequest extends FormRequest
     public function messages()
     {
         return [
-            'nama.required'=>'Nama required',
+            // 'nama.required'=>'Nama required',
             'email.required'=>'Email required',
             'email.email'=>'Email tidak valid',
             'password.required'=>'Password required',
