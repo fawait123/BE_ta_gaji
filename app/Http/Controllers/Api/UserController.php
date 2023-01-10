@@ -74,7 +74,7 @@ class UserController extends Controller
                 'message'=>'Data Created Success',
                 'data'=>$storeData
             ];
-            return Response::send(200,$data);
+            return Response::send(200,['message'=>'Data Created Success','data'=>$storeData]);
         }catch(Exception $error){
             return Response::send(500,$error->getMessage());
         }
