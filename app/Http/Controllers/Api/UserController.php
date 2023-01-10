@@ -75,8 +75,8 @@ class UserController extends Controller
                 'data'=>$storeData
             ];
             return Response::send(200,['message'=>'Data Created Success','data'=>$storeData]);
-        }catch(Exception $error){
-            return Response::send(500,$error->getMessage());
+        }catch(\Throwable $th){
+            return Response::send(500,['message'=>$th->getMessage(),'data'=>[]]);
         }
     }
 
@@ -144,8 +144,8 @@ class UserController extends Controller
                 "data"=>[]
             ];
             return Response::send(200,$data);
-        }catch(Exception $error){
-            return Response::send(500,$error->getMessage());
+        }catch(\Throwable $th){
+            return Response::send(500,['message'=>$th->getMessage(),'data'=>[]]);
         }
     }
 
@@ -172,8 +172,8 @@ class UserController extends Controller
                "data"=>[]
             ];
             return Response::send(200,$data);
-        }catch(Exception $error){
-               return Response::send(500,$error->getMessage());
+        }catch(\Throwable $error){
+            return Response::send(500,['message'=>$th->getMessage(),'data'=>[]]);
            }
     }
 }
