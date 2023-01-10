@@ -39,7 +39,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // api karyawan
-Route::group(['prefix'=>'karyawan','as'=>'karyawan','middleware'=>'auth:api'],function(){
+Route::group(['prefix'=>'karyawan','as'=>'karyawan','middleware'=>['auth:api','cors']],function(){
     Route::get('/',[KaryawanController::class,'index']);
     Route::get('/detail',[KaryawanController::class,'show']);
     Route::post('/',[KaryawanController::class,'store']);
@@ -48,7 +48,7 @@ Route::group(['prefix'=>'karyawan','as'=>'karyawan','middleware'=>'auth:api'],fu
 });
 
 // api jabatan
-Route::group(['prefix'=>'jabatan','as'=>'jabatan','middleware'=>'auth:api'],function(){
+Route::group(['prefix'=>'jabatan','as'=>'jabatan','middleware'=>['auth:api','cors']],function(){
     Route::get('/',[JabatanController::class,'index']);
     Route::post('/',[JabatanController::class,'store']);
     Route::put('/',[JabatanController::class,'update']);
@@ -56,7 +56,7 @@ Route::group(['prefix'=>'jabatan','as'=>'jabatan','middleware'=>'auth:api'],func
 });
 
 // api komponent
-Route::group(['prefix'=>'komponen','as'=>'komponen','middleware'=>'auth:api'],function(){
+Route::group(['prefix'=>'komponen','as'=>'komponen','middleware'=>['auth:api','cors']],function(){
     Route::get('/',[KomponenController::class,'index']);
     Route::post('/',[KomponenController::class,'store']);
     Route::put('/',[KomponenController::class,'update']);
@@ -64,7 +64,7 @@ Route::group(['prefix'=>'komponen','as'=>'komponen','middleware'=>'auth:api'],fu
 });
 
 //api absensi
-Route::group(['prefix'=>'absen','as'=>'absen','middleware'=>'auth:api'],function(){
+Route::group(['prefix'=>'absen','as'=>'absen','middleware'=>['auth:api','cors']],function(){
     Route::get('/',[AbsensiController::class,'index']);
     Route::post('/',[AbsensiController::class,'store']);
     Route::put('/',[AbsensiController::class,'update']);
@@ -73,7 +73,7 @@ Route::group(['prefix'=>'absen','as'=>'absen','middleware'=>'auth:api'],function
 
 
 //api tunjangan
-Route::group(['prefix'=>'tunjangan','as'=>'tunjangan','middleware'=>'auth:api'],function(){
+Route::group(['prefix'=>'tunjangan','as'=>'tunjangan','middleware'=>['auth:api','cors']],function(){
     Route::get('/',[TunjanganController::class,'index']);
     Route::post('/',[TunjanganController::class,'store']);
     Route::put('/',[TunjanganController::class,'update']);
@@ -82,7 +82,7 @@ Route::group(['prefix'=>'tunjangan','as'=>'tunjangan','middleware'=>'auth:api'],
 
 
 //api potongan
-Route::group(['prefix'=>'potongan','as'=>'potongan','middleware'=>'auth:api'],function(){
+Route::group(['prefix'=>'potongan','as'=>'potongan','middleware'=>['auth:api','cors']],function(){
     Route::get('/',[PotonganController::class,'index']);
     Route::post('/',[PotonganController::class,'store']);
     Route::put('/',[PotonganController::class,'update']);
@@ -90,7 +90,7 @@ Route::group(['prefix'=>'potongan','as'=>'potongan','middleware'=>'auth:api'],fu
 });
 
 //api keluarga
-Route::group(['prefix'=>'keluarga','as'=>'keluarga','middleware'=>'auth:api'],function(){
+Route::group(['prefix'=>'keluarga','as'=>'keluarga','middleware'=>['auth:api','cors']],function(){
     Route::get('/',[KeluargaController::class,'index']);
     Route::post('/',[KeluargaController::class,'store']);
     Route::put('/',[KeluargaController::class,'update']);
@@ -98,7 +98,7 @@ Route::group(['prefix'=>'keluarga','as'=>'keluarga','middleware'=>'auth:api'],fu
 });
 
 //api user
-Route::group(['prefix'=>'user','as'=>'user','middleware'=>'auth:api'],function(){
+Route::group(['prefix'=>'user','as'=>'user','middleware'=>['auth:api','cors']],function(){
     Route::get('/',[UserController::class,'index']);
     Route::post('/',[UserController::class,'store']);
     Route::put('/',[UserController::class,'update']);
@@ -106,29 +106,29 @@ Route::group(['prefix'=>'user','as'=>'user','middleware'=>'auth:api'],function()
 });
 
 //api kelola gaji
-Route::group(['prefix'=>'kelola-gaji','as'=>'kelola-gaji','middleware'=>'auth:api'],function(){
+Route::group(['prefix'=>'kelola-gaji','as'=>'kelola-gaji','middleware'=>['auth:api','cors']],function(){
     Route::post('/',[KelolaGajiController::class,'postMulti']);
     Route::get('/',[KelolaGajiController::class,'index']);
 });
 
 // report
-Route::group(['prefix'=>'laporan','as'=>'laporan','middleware'=>'auth:api'],function(){
+Route::group(['prefix'=>'laporan','as'=>'laporan','middleware'=>['auth:api','cors']],function(){
     Route::get('/gaji',[LaporanController::class,'gaji']);
     Route::get('/absen',[LaporanController::class,'absen']);
     Route::get('/slip',[LaporanController::class,'slip']);
 });
 
 // route dashboard
-Route::group(['prefix'=>'dashboard'],function(){
+Route::group(['prefix'=>'dashboard','middleware'=>'cors'],function(){
     Route::get('/',[DashboardController::class,'dashboard']);
 });
 
 // run payroll
-Route::post('run-payroll',[RunPayrollController::class,'run']);
+Route::post('run-payroll',[RunPayrollController::class,'run'])->middleware('cors');
 
 // api login
-Route::post('login',[AuthController::class,'login'])->name('login');
-Route::post('register',[AuthController::class,'register']);
+Route::post('login',[AuthController::class,'login'])->name('login')->middleware('cors');
+Route::post('register',[AuthController::class,'register'])->middleware('cors');
 
 Route::get('unauthorized',function(){
     $data = [
@@ -136,4 +136,4 @@ Route::get('unauthorized',function(){
         'data'=>[]
     ];
     return Response::send(401,$data);
-})->name('unauthorized');
+})->name('unauthorized')->middleware('cors');
