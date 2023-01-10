@@ -30,7 +30,7 @@ class LaporanController extends Controller
     public function absen(Request $request)
     {
         $data = [];
-        $karyawan = Karyawan::with('jabatan')->all();
+        $karyawan = Karyawan::with('jabatan')->get();
         foreach($karyawan as $kary)
         {
             $absen = Absensi::query();
