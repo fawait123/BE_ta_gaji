@@ -5,6 +5,6 @@ namespace App\Helpers;
 class Response{
     public static function send($code,$message)
     {
-        return response()->json($message,$code);
+        return response()->json($message,$code)->header("Access-Control-Allow-Origin",  "*");
     }
 }
