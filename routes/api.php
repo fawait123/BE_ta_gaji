@@ -98,7 +98,7 @@ Route::group(['prefix'=>'keluarga','as'=>'keluarga','middleware'=>['auth:api','c
 });
 
 //api user
-Route::group(['prefix'=>'user','as'=>'user','middleware'=>['auth:api','cors']],function(){
+Route::group(['prefix'=>'pengguna','as'=>'pengguna','middleware'=>['auth:api','cors']],function(){
     Route::get('/',[UserController::class,'index']);
     Route::post('/',[UserController::class,'store']);
     Route::put('/',[UserController::class,'update']);
