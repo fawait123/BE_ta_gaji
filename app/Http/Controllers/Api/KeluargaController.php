@@ -69,8 +69,8 @@ class KeluargaController extends Controller
                 'data'=>$storeData
             ];
             return Response::send(200,$data);
-        }catch(Exception $error){
-            return Response::send(500,$error->getMessage());
+        }catch(\Throwable $th){
+            return Response::send(500,$th->getMessage());
         }
     }
 
@@ -120,8 +120,8 @@ class KeluargaController extends Controller
                 "data"=>[]
             ];
             return Response::send(200,$data);
-        }catch(Exception $error){
-            return Response::send(500,$error->getMessage());
+        }catch(\Throwable $th){
+            return Response::send(500,$th->getMessage());
         }
     }
 
@@ -148,8 +148,8 @@ class KeluargaController extends Controller
                "data"=>[]
             ];
             return Response::send(200,$data);
-        }catch(Exception $error){
-               return Response::send(500,$error->getMessage());
+        }catch(\Throwable $th){
+               return Response::send(500,$th->getMessage());
            }
     }
 }
