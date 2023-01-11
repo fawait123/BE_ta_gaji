@@ -1,0 +1,20 @@
+POST http://localhost:8000/api/user
+
+Content-Type: 'application/json'
+
+{
+    "email":"rymnddd@gmail.com",
+    "username":"devin",
+    "password":"devin",
+    "role":"Staff"
+}
+
+
+####
+POST http://localhost:8000/api/login
+Content-Type: application/json
+
+{
+    "username":"fawait",
+    "password":"fawait",
+}
