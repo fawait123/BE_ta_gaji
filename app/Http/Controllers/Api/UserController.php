@@ -24,7 +24,7 @@ class UserController extends Controller
             $meta = Pagination::defaultMetaInput($request->only(['page','perPage','order','dir','search']));
             $query = User::query();
             $query->where(function($q) use($meta){
-                $q->orWhere('nama', 'like', $meta['search'] . '%');
+                $q->orWhere('username', 'like', $meta['search'] . '%');
             });
             $total = $query->count();
             $meta = Pagination::additionalMeta($meta, $total);
@@ -63,7 +63,6 @@ class UserController extends Controller
     {
         try{
             $storeData = User::create([
-                'nama'=>$request->nama ?? '',
                 'email'=>$request->email,
                 'username'=>$request->username,
                 'password'=>Hash::make($request->password),
@@ -74,7 +73,7 @@ class UserController extends Controller
                 'message'=>'Data Created Success',
                 'data'=>$storeData
             ];
-            return Response::send(200,['message'=>'Data Created Success','data'=>$storeData]);
+            return Response::send(200,$data);
         }catch(\Throwable $th){
             return Response::send(500,['message'=>$th->getMessage(),'data'=>[]]);
         }
