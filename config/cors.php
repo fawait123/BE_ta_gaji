@@ -19,16 +19,16 @@ return [
 
     'allowed_methods' => ['POST', 'GET', 'DELETE', 'PUT','PATCH', '*'],
 
-    'allowed_origins' => ['http://sinduadihebat.my.id','http://localhost:3000','*'],
+    'allowed_origins' => ['http://sinduadihebat.my.id','*'],
 
-    'allowed_origins_patterns' => ['*'],
+    'allowed_origins_patterns' => [],
 
     'allowed_headers' => ['X-Custom-Header', 'Upgrade-Insecure-Requests', '*'],
 
-    'exposed_headers' => ['*'],
+    'exposed_headers' => [],
 
-    'max_age' => false,
+    'max_age' => 0,
 
-    'supports_credentials' => false,
+    'supports_credentials' => true,
 
 ];
