@@ -59,9 +59,14 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UserRequest $request)
+    public function store(Request $request)
     {
         try{
+            $request->validate([
+                'email'=>'required|email:dns',
+                'username'=>'required',
+                'password'=>'required'
+            ]);
             $storeData = User::create([
                 'email'=>$request->email,
                 'username'=>$request->username,
