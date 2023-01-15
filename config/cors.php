@@ -15,20 +15,20 @@ return [
     |
     */
 
-    'paths' => ['api/*'],
+    'paths' => ['api/*','api/karyawan/*','api/jabatan/*','api/komponen/*','api/absen/*','api/tunjangan/*','api/potongan/*','api/keluarga/*','api/pengguna/*','api/kelola-gaji/*','api/laporan/*','*'],
 
-    'allowed_methods' => ['*'],
+    'allowed_methods' => ['POST', 'GET', 'DELETE', 'PUT', '*'],
 
-    'allowed_origins' => ['sinduadihebat.my.id','*.sinduadihebat.my.id'],
+    'allowed_origins' => ['http://sinduadihebat.my.id','*'],
 
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['*'],
+    'allowed_headers' => ['X-Custom-Header', 'Upgrade-Insecure-Requests', '*'],
 
     'exposed_headers' => [],
 
     'max_age' => 0,
 
-    'supports_credentials' => false,
+    'supports_credentials' => true,
 
 ];
