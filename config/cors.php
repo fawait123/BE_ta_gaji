@@ -21,14 +21,14 @@ return [
 
     'allowed_origins' => ['http://sinduadihebat.my.id','http://localhost:3000','*'],
 
-    'allowed_origins_patterns' => [],
+    'allowed_origins_patterns' => ['*'],
 
     'allowed_headers' => ['X-Custom-Header', 'Upgrade-Insecure-Requests', '*'],
 
-    'exposed_headers' => [],
+    'exposed_headers' => ['*'],
 
-    'max_age' => 0,
+    'max_age' => false,
 
-    'supports_credentials' => true,
+    'supports_credentials' => false,
 
 ];
