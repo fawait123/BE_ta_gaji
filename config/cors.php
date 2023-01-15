@@ -17,7 +17,7 @@ return [
 
     'paths' => ['api/*','api/karyawan/*','api/jabatan/*','api/komponen/*','api/absen/*','api/tunjangan/*','api/potongan/*','api/keluarga/*','api/pengguna/*','api/kelola-gaji/*','api/laporan/*','*'],
 
-    'allowed_methods' => ['POST', 'GET', 'DELETE', 'PUT', '*'],
+    'allowed_methods' => ['POST', 'GET', 'DELETE', 'PUT','PATCH', '*'],
 
     'allowed_origins' => ['http://sinduadihebat.my.id','http://localhost:3000','*'],
 
