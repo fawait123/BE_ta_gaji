@@ -184,7 +184,7 @@ class UserController extends Controller
                "data"=>[]
             ];
             return Response::send(200,$data);
-        }catch(\Throwable $error){
+        }catch(Exception $error){
             return Response::send(500,['message'=>$th->getMessage(),'data'=>[]]);
            }
     }
