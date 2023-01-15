@@ -74,8 +74,8 @@ class UserController extends Controller
                 'data'=>$storeData
             ];
             return Response::send(200,$data);
-        }catch(\Throwable $th){
-            return Response::send(500,['message'=>$th->getMessage(),'data'=>[]]);
+        }catch(Exception $th){
+            return Response::send(500,$th->getMessage());
         }
     }
 
