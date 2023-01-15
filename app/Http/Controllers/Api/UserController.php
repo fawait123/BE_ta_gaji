@@ -10,6 +10,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -62,12 +63,20 @@ class UserController extends Controller
     public function store(Request $request)
     {
         try{
-            $request->validate([
+            $validator = Validator::make($request,[
                 'email'=>'required|email:dns',
                 'username'=>'required',
                 'password'=>'required',
                 'role'=>'required'
             ]);
+
+            if($validator->fails()){
+                $data = [
+                    'message'=>'The given data was invalid',
+                    'data'=>$validator->messages()->toJson()
+                ];
+                return Response::send(200,$data);
+            }
             $storeData = User::create([
                 'email'=>$request->email,
                 'username'=>$request->username,
@@ -175,7 +184,7 @@ class UserController extends Controller
                "data"=>[]
             ];
             return Response::send(200,$data);
-        }catch(\Throwable $error){
+        }catch(Exception $error){
             return Response::send(500,['message'=>$th->getMessage(),'data'=>[]]);
            }
     }
