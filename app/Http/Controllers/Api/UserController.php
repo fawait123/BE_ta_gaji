@@ -63,7 +63,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         try{
-            $validator = Validator::make($request,[
+            $validator = Validator::make($request->all(),[
                 'email'=>'required|email:dns',
                 'username'=>'required',
                 'password'=>'required',
@@ -73,9 +73,9 @@ class UserController extends Controller
             if($validator->fails()){
                 $data = [
                     'message'=>'The given data was invalid',
-                    'data'=>$validator->messages()->toJson()
+                    // 'data'=>$validator->messages()->toJson()
                 ];
-                return Response::send(200,$data);
+                return Response::send(400,$data);
             }
             $storeData = User::create([
                 'email'=>$request->email,
