@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['POST', 'GET', 'DELETE', 'PUT', '*'],
 
-    'allowed_origins' => ['http://sinduadihebat.my.id','*'],
+    'allowed_origins' => ['http://sinduadihebat.my.id','http://localhost:3000','*'],
 
     'allowed_origins_patterns' => [],
 
