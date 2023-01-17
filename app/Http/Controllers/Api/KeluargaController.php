@@ -24,9 +24,13 @@ class KeluargaController extends Controller
             $query = Keluarga::query();
             $query = $query->with('karyawan');
 
-            $query->where(function($q) use($meta){
-                $q->orWhere('nama', 'like', $meta['search'] . '%');
-            });
+            if($meta['search'] != ''){
+                $query->where(function($q) use($meta){
+                    $q->where('nama', 'like', $meta['search'] . '%')->orWhereHas('karyawan',function($qr){
+                        $qr->where('nama', 'like', $meta['search'] . '%');
+                    });
+                });
+            }
             $total = $query->count();
             $meta = Pagination::additionalMeta($meta, $total);
             if ($meta['perPage'] != '-1') {

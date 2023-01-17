@@ -16,4 +16,9 @@ class Penggajian extends Model
     {
         return $this->belongsTo(Karyawan::class, 'karyawan_id',);
     }
+
+    public function detail()
+    {
+        return $this->hasMany(PenggajianDetail::class, 'penggajian_id');
+    }
 }

@@ -18,57 +18,59 @@ class KelolaGajiController extends Controller
         try {
         $data = $request->all();
         $result = [];
+        Tunjangan::where('jabatan_id',$request->jabatan_id)->delete();
         // penambahan
         foreach ($data['penambahan'] as $key) {
-            if($key['id'] == null){
+            // if($key['id'] == null){
                 Tunjangan::create([
                     'komponen_id'=>$key['komponen_id'],
                     'jabatan_id'=>$request['jabatan_id'],
                     'jumlah'=>$key['jumlah'],
                 ]);
-                unset($key['id']);
-                array_push($key);
-            }else{
-                $check = Tunjangan::where('id',$key['id'])->first();
-                if($check){
-                    Tunjangan::where('id',$key['id'])->update([
-                        "komponen_id"=>$key['komponen_id'],
-                        "jabatan_id"=>$request['jabatan_id'],
-                        "jumlah"=>$key['jumlah'],
-                    ]);
-                    array_push($result,[
-                        'komponen_id'=>$check['komponen_id'],
-                        'jabatan_id'=>$request['jabatan_id'],
-                        'jumlah'=>$check['jumlah'],
-                    ]);
-                }
-            }
+            //     unset($key['id']);
+            //     array_push($key);
+            // }else{
+            //     $check = Tunjangan::where('id',$key['id'])->first();
+            //     if($check){
+            //         Tunjangan::where('id',$key['id'])->update([
+            //             "komponen_id"=>$key['komponen_id'],
+            //             "jabatan_id"=>$request['jabatan_id'],
+            //             "jumlah"=>$key['jumlah'],
+            //         ]);
+            //         array_push($result,[
+            //             'komponen_id'=>$check['komponen_id'],
+            //             'jabatan_id'=>$request['jabatan_id'],
+            //             'jumlah'=>$check['jumlah'],
+            //         ]);
+            //     }
+            // }
         }
+        Potongan::where('jabatan_id',$request->jabatan_id)->delete();
         // pengurangan
         foreach ($data['pengurangan'] as $key) {
-            if($key['id'] == null){
+            // if($key['id'] == null){
                 Potongan::create([
                     'komponen_id'=>$key['komponen_id'],
                     'jabatan_id'=>$request['jabatan_id'],
                     'jumlah'=>$key['jumlah'],
                 ]);
-                unset($key['id']);
-                array_push($key);
-            }else{
-                $check = Potongan::where('id',$key['id'])->first();
-                if($check){
-                    Potongan::where('id',$key['id'])->update([
-                        "komponen_id"=>$key['komponen_id'],
-                        "jabatan_id"=>$request['jabatan_id'],
-                        "jumlah"=>$key['jumlah'],
-                    ]);
-                    array_push($result,[
-                        'komponen_id'=>$check['komponen_id'],
-                        'jabatan_id'=>$request['jabatan_id'],
-                        'jumlah'=>$check['jumlah'],
-                    ]);
-                }
-            }
+                // unset($key['id']);
+                // array_push($key);
+            // }else{
+            //     $check = Potongan::where('id',$key['id'])->first();
+            //     if($check){
+            //         Potongan::where('id',$key['id'])->update([
+            //             "komponen_id"=>$key['komponen_id'],
+            //             "jabatan_id"=>$request['jabatan_id'],
+            //             "jumlah"=>$key['jumlah'],
+            //         ]);
+            //         array_push($result,[
+            //             'komponen_id'=>$check['komponen_id'],
+            //             'jabatan_id'=>$request['jabatan_id'],
+            //             'jumlah'=>$check['jumlah'],
+            //         ]);
+            //     }
+            // }
         }
         $dataResult = [
             'message'=>'Data Created Success',

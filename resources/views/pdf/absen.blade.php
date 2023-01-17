@@ -40,6 +40,7 @@
             <th>NO</th>
             <th>Nama Karyawan</th>
             <th>Jabatan</th>
+            <th>Hadir</th>
             <th>Sakit</th>
             <th>Ijin</th>
             <th>Alpha</th>
@@ -49,6 +50,7 @@
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ $item['nama'] ?? '' }}</td>
                 <td>{{ $item['jabatan'] ?? '' }}</td>
+                <td>{{ $item['hadir'] }}</td>
                 <td>{{ $item['sakit'] }}</td>
                 <td>{{ $item['ijin'] }}</td>
                 <td>{{ $item['alpha'] }}</td>

@@ -10,4 +10,9 @@ class PenggajianDetail extends Model
     use HasFactory;
     protected $guarded = ['id'];
     protected $table = 'penggajian_details';
+
+    public function komponen()
+    {
+        return $this->belongsTo(Komponen::class,'komponen_id');
+    }
 }
