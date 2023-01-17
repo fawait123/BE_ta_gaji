@@ -9,9 +9,11 @@ use App\Models\Penggajian;
 use App\Models\PenggajianDetail;
 use App\Models\Potongan;
 use App\Models\Tunjangan;
+use App\Models\Jabatan;
 use App\Models\Keluarga;
 use Illuminate\Http\Request;
 use Carbon\CarbonPeriod;
+use App\Http\Resources\Jabatan as JabatanResources;
 
 class RunPayrollController extends Controller
 {
@@ -22,23 +24,28 @@ class RunPayrollController extends Controller
             foreach ($karyawan as $key) {
                 $total_allowance = 0;
                 $total_deduction = 0;
-                $data = [];
+                $data = collect([]);
                 // grouping tunjangan karyawan
                 // cari tunjangan
-                $queryAllowance = Tunjangan::where('jabatan_id',$key->jabatan_id)->whereHas('komponen',function($q){
+                $queryAllowance = Tunjangan::with('komponen')->where('jabatan_id',$key->jabatan_id)->whereHas('komponen',function($q){
                     $q->where('nama','not like','%istri%')->where('nama','not like','%anak%')->where('nama','not like','%suami%');
                 })->get();
+                // $queryAllowance = Jabatan::with(['tunjangans.komponen','potongans.komponen'])->where('id',$key->jabatan_id)->first();
+                // $dataTunjangan = new JabatanResources($queryAllowance);
                 foreach($queryAllowance as $allowance){
-                    $total_allowance += $allowance->jumlah;
-                    array_push($data,[
-                        "komponen_id"=>$allowance->komponen_id,
-                        "tipe"=>"Penambahan",
-                        "jumlah"=>$allowance->jumlah,
-                    ]);
+                    $check = $data->where('nama',$allowance->komponen->nama)->all();
+                    if(count($check) == 0){
+                        $total_allowance += $allowance->jumlah;
+                        $data->push([
+                            "komponen_id"=>$allowance->komponen_id,
+                            "tipe"=>"Penambahan",
+                            "jumlah"=>$allowance->jumlah,
+                            'nama'=>$allowance->komponen->nama,
+                        ]);
+                    }
                 }
-
                 // cari keluarga istri
-                $queryIstri = Keluarga::where('karyawan_id',$key->jabatan_id)->where('jenis','like','%istri%')->orWhere('jenis','like','%suami%')->get();
+                $queryIstri = Keluarga::where('karyawan_id',$key->id)->where('jenis','not like','%anak%')->get();
                 foreach($queryIstri as $allowance){
                     $komponenIstri = Tunjangan::whereHas('komponen',function($q){
                         $q->where('nama','like','%istri%')->orWhere('nama','like','%suami%');
@@ -46,16 +53,16 @@ class RunPayrollController extends Controller
                     $tunjanganIstri = $komponenIstri ? $komponenIstri->jumlah : 0;
                     $total_allowance += $tunjanganIstri;
                     if($komponenIstri){
-                        array_push($data,[
-                            "komponen_id"=>$komponenIstri->komponen_id,
-                            "tipe"=>"Penambahan",
-                            "jumlah"=>$komponenIstri->jumlah,
-                        ]);
+                       $data->push([
+                        "komponen_id"=>$komponenIstri->komponen_id,
+                        "tipe"=>"Penambahan",
+                        "jumlah"=>$komponenIstri->jumlah,
+                       ]);
                     }
                 }
 
                 // cari keluarga anak
-                $queryAnak = Keluarga::where('karyawan_id',$key->jabatan_id)->where('jenis','like','%anak%')->get();
+                $queryAnak = Keluarga::where('karyawan_id',$key->id)->where('jenis','like','%anak%')->get();
                 foreach($queryAnak as $allowance){
                     $umur = $this->getRange($allowance->tgl_lahir,date('Y-m-d'));
                     if(count($umur)<=7300){
@@ -65,7 +72,7 @@ class RunPayrollController extends Controller
                         $tunjanganAnak = $komponenAnak ? $komponenAnak->jumlah :0;
                         $total_allowance += $tunjanganAnak;
                         if($komponenAnak){
-                            array_push($data,[
+                            $data->push([
                                 "komponen_id"=>$komponenAnak->komponen_id,
                                 "tipe"=>"Penambahan",
                                 "jumlah"=>$komponenAnak->jumlah,
@@ -76,14 +83,18 @@ class RunPayrollController extends Controller
 
                 // grouping pengurangan karyawan
                 // cari pengurangan
-                $queryDeduction = Potongan::where('jabatan_id',$key->jabatan_id)->get();
+                $queryDeduction = Potongan::with('komponen')->where('jabatan_id',$key->jabatan_id)->get();
                 foreach($queryDeduction as $deduction){
-                    $total_deduction += $deduction->jumlah;
-                    array_push($data,[
-                        "komponen_id"=>$deduction->komponen_id,
-                        "tipe"=>"Pengurangan",
-                        "jumlah"=>$deduction->jumlah,
-                    ]);
+                    $check = $data->where('nama',$deduction->komponen->nama)->all();
+                    if(count($check)==0){
+                        $total_deduction += $deduction->jumlah;
+                        $data->push([
+                            "komponen_id"=>$deduction->komponen_id,
+                            "tipe"=>"Pengurangan",
+                            "jumlah"=>$deduction->jumlah,
+                            'nama'=>$deduction->komponen->nama,
+                        ]);
+                    }
                 }
 
                 $gaji = Penggajian::create([
@@ -101,12 +112,25 @@ class RunPayrollController extends Controller
                         'jumlah'=>$item['jumlah']
                     ]);
                 }
+
             }
-            return Response::send(200,['message'=>'Run Payroll Berhasil','data'=>$karyawan]);
-        } catch (\Throwable $th) {
+
+            return Response::send(200,['message'=>'Run Payroll Berhasil','data'=>[]]);
+        } catch (Exception $th) {
             return Response::send(500,['message'=>$th->getMessage(),'data'=>[]]);
         }
     }
+
+    // public function run(Request $request)
+    // {
+    //     try {
+    //         $jabatan = Jabatan::with(['tunjangans.komponen','potongans.komponen'])->where('id',6)->first();
+    //         // $jabatan = new JabatanResources($jabatan);
+    //         return $jabatan;
+    //     } catch (Exception $th) {
+    //         return Response::send(500,['message'=>$th->getMessage(),'data'=>[]]);
+    //     }
+    // }
 
     public function getRange($start,$end)
     {

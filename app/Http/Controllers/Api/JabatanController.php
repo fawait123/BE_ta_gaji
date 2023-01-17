@@ -9,6 +9,7 @@ use App\Http\Requests\JabatanRequest;
 use App\Models\Jabatan;
 use Exception;
 use Illuminate\Http\Request;
+use App\Http\Resources\Jabatan as JabatanResources;
 
 class JabatanController extends Controller
 {
@@ -35,9 +36,10 @@ class JabatanController extends Controller
                 $query->offset($meta['offset'])->limit($meta['perPage']);
             }
             $results = $query->get();
+            $res = JabatanResources::collection($results);
             $data = [
                 'message'  => 'List Data Karyawan',
-                'results'  => $results,
+                'results'  => $res,
                 'meta'     =>  $meta
             ];
             return Response::send(200,$data);

@@ -46,71 +46,78 @@
             <li>TUNJANGAN
                 <div style="position: relative">
                     <ol type="1">
-                        @foreach ($penggajian->karyawan->jabatan->tunjangans as $item)
-                            <li>{{ $item->komponen->nama ?? '' }}</li>
+                        @foreach ($penggajian->detail as $item)
+                            @if ($item->tipe == 'Penambahan')
+                                <li>{{ $item->komponen->nama ?? '' }}</li>
+                            @endif
                         @endforeach
                     </ol>
                     <div style="position: absolute;top:0;right:0;">
-                        @foreach ($penggajian->karyawan->jabatan->tunjangans as $item)
-                            < <div>
-                                <div style="width:160px;display: inline-block;">Rp.</div>
-                                {{ number_format($item->jumlah, 2, ',', '.') }}
+                        @foreach ($penggajian->detail as $item)
+                            @if ($item->tipe == 'Penambahan')
+                                <div>
+                                    <div style="width:160px;display: inline-block;">Rp.</div>
+                                    {{ number_format($item->jumlah, 2, ',', '.') }}
+                                </div>
+                            @endif
+                        @endforeach
                     </div>
-                    @endforeach
-
                 </div>
-    </div>
-    </li>
-    <li style="margin-top: 40px;">PENGURANGAN
-        <div style="position: relative">
-            <ol type="1">
-                @foreach ($penggajian->karyawan->jabatan->potongans as $item)
-                    <li>{{ $item->komponen->nama }}</li>
-                @endforeach
-            </ol>
-            <div style="position: absolute;top:0;right:0;">
-                @foreach ($penggajian->karyawan->jabatan->potongans as $item)
-                    < <div>
-                        <div style="width:160px;display: inline-block;">Rp.</div>
-                        {{ number_format($item->jumlah, 2, ',', '.') }}
-            </div>
-            @endforeach
-        </div>
-        </div>
-    </li>
-    <li style="margin-top: 40px; margin-bottom:20px;">TERIMA BERSIH / TRANSFER
-        <div style="position: relative">
-            <div style="position: absolute;top:0;right:0;">
-                <div>
-                    <div style="width:160px;display: inline-block;">Rp.</div>
-                    {{ number_format($penggajian->total_gaji, 2, ',', '.') }}
+            </li>
+            <li style="margin-top: 40px;">PENGURANGAN
+                <div style="position: relative">
+                    <ol type="1">
+                        @foreach ($penggajian->detail as $item)
+                            @if ($item->tipe == 'Pengurangan')
+                                <li>{{ $item->komponen->nama }}</li>
+                            @endif
+                        @endforeach
+                    </ol>
+                    <div style="position: absolute;top:0;right:0;">
+                        @foreach ($penggajian->detail as $item)
+                            @if ($item->tipe == 'Pengurangan')
+                                <div>
+                                    <div style="width:160px;display: inline-block;">Rp.</div>
+                                    {{ number_format($item->jumlah, 2, ',', '.') }}
+                                </div>
+                            @endif
+                        @endforeach
+                    </div>
                 </div>
+            </li>
+            <li style="margin-top: 40px; margin-bottom:20px;">TERIMA BERSIH / TRANSFER
+                <div style="position: relative">
+                    <div style="position: absolute;top:0;right:0;">
+                        <div>
+                            <div style="width:160px;display: inline-block;">Rp.</div>
+                            {{ number_format($penggajian->total_gaji, 2, ',', '.') }}
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ol>
+        <div style="border-bottom: 1px solid black; margin-top:40px;margin-bottom:20px;"></div>
+        <div style="position: relative;">
+            <div>
+                <span>Yang Menerima</span>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <span>{{ strtoupper($penggajian->karyawan->nama ?? '') }}</span>
+            </div>
+            <div style="position: absolute;top:0;right:0;">
+                <span style="display:block">Sinduadi, {{ date('d M Y') }}</span>
+                <span>Kaum Danarta</span>
+                <br>
+                <br>
+                <br>
+                <br>
+                <span>Agus Sudarmana</span>
             </div>
         </div>
-    </li>
-    </ol>
-    <div style="border-bottom: 1px solid black; margin-top:40px;margin-bottom:20px;"></div>
-    <div style="position: relative;">
-        <div>
-            <span>Yang Menerima</span>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <span>{{ strtoupper($penggajian->karyawan->nama ?? '') }}</span>
-        </div>
-        <div style="position: absolute;top:0;right:0;">
-            <span style="display:block">Sinduadi, {{ date('d M Y') }}</span>
-            <span>Kaum Danarta</span>
-            <br>
-            <br>
-            <br>
-            <br>
-            <span>Agus Sudarmana</span>
-        </div>
-    </div>
     </div>
 </body>
 

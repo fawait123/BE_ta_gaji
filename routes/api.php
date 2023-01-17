@@ -112,7 +112,7 @@ Route::group(['prefix'=>'kelola-gaji','as'=>'kelola-gaji','middleware'=>'auth:ap
 });
 
 // report
-Route::group(['prefix'=>'laporan','as'=>'laporan','middleware'=>'auth:api'],function(){
+Route::group(['prefix'=>'laporan','as'=>'laporan'],function(){
     Route::get('/gaji',[LaporanController::class,'gaji']);
     Route::get('/absen',[LaporanController::class,'absen']);
     Route::get('/slip',[LaporanController::class,'slip']);
@@ -124,11 +124,11 @@ Route::group(['prefix'=>'dashboard','middleware'=>'cors'],function(){
 });
 
 // run payroll
-Route::post('run-payroll',[RunPayrollController::class,'run'])->middleware('cors');
+Route::post('run-payroll',[RunPayrollController::class,'run']);
 
 // api login
-Route::post('login',[AuthController::class,'login'])->name('login')->middleware('cors');
-Route::post('register',[AuthController::class,'register'])->middleware('cors');
+Route::post('login',[AuthController::class,'login'])->name('login');
+Route::post('register',[AuthController::class,'register']);
 
 Route::get('unauthorized',function(){
     $data = [
@@ -136,4 +136,4 @@ Route::get('unauthorized',function(){
         'data'=>[]
     ];
     return Response::send(401,$data);
-})->name('unauthorized')->middleware('cors');
+})->name('unauthorized');

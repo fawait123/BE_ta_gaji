@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Absensi;
 use App\Models\Penggajian;
 use App\Models\Karyawan;
+use App\Models\Potongan;
+use App\Models\Tunjangan;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class LaporanController extends Controller
@@ -38,10 +40,10 @@ class LaporanController extends Controller
                 $absen = $absen->whereBetween('tgl_absen',[$request->start_date,$request->end_date]);
             }
 
-            $sakit = $absen->where('status_kehadiran','like','%sakit%')->count();
-            $hadir = $absen->where('status_kehadiran','like','%hadir%')->count();
-            $alpha = $absen->where('status_kehadiran','like','%alpha%')->count();
-            $ijin = $absen->where('status_kehadiran','like','%ijin%')->count();
+            $sakit = $absen->where('status_kehadiran','like','%sakit%')->where('karyawan_id',$kary->id)->count();
+            $hadir = $absen->where('status_kehadiran','like','%hadir%')->where('karyawan_id',$kary->id)->count();
+            $alpha = $absen->where('status_kehadiran','like','%alpha%')->where('karyawan_id',$kary->id)->count();
+            $ijin = $absen->where('status_kehadiran','like','%ijin%')->where('karyawan_id',$kary->id)->count();
 
             array_push($data,[
                 'nama'=>$kary->nama ?? '',
@@ -70,7 +72,7 @@ class LaporanController extends Controller
 
     public function slip(Request $request)
     {
-        $data = Penggajian::with(['karyawan.jabatan.tunjangans.komponen','karyawan.jabatan.potongans.komponen'])->where('id',$request->penggajian_id)->first();
+        $data = Penggajian::with(['karyawan.jabatan','detail.komponen'])->where('id',$request->penggajian_id)->first();
         $pdf = Pdf::loadView('pdf.slip',[
             'penggajian'=>$data
         ]);
