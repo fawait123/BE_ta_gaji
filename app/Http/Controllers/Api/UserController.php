@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Helpers\Pagination;
 use App\Helpers\Response;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiController;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Exception;
@@ -12,7 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class UserController extends Controller
+class UserController extends ApiController
 {
     /**
      * Display a listing of the resource.
