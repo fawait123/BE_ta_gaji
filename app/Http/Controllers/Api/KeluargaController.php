@@ -22,12 +22,12 @@ class KeluargaController extends Controller
         try{
             $meta = Pagination::defaultMetaInput($request->only(['page','perPage','order','dir','search']));
             $query = Keluarga::query();
-            $query = $query->with('karyawan');
+            $query = $query->with('karyawan.jabatan');
 
             if($meta['search'] != ''){
                 $query->where(function($q) use($meta){
-                    $q->where('nama', 'like', $meta['search'] . '%')->orWhereHas('karyawan',function($qr){
-                        $qr->where('nama', 'like', $meta['search'] . '%');
+                    $q->where('nama', 'like','%'. $meta['search'] . '%')->orWhereHas('karyawan',function($qr)use($meta){
+                        $qr->where('nama', 'like', '%'.$meta['search'] . '%');
                     });
                 });
             }
