@@ -28,7 +28,7 @@ class JabatanController extends Controller
                 $query = $query->where('id',$request->filterID);
             }
             $query->where(function($q) use($meta){
-                $q->orWhere('nama', 'like', $meta['search'] . '%');
+                $q->orWhere('nama', 'like', '%'.$meta['search'] . '%');
             });
             $total = $query->count();
             $meta = Pagination::additionalMeta($meta, $total);

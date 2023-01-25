@@ -25,7 +25,7 @@ class KaryawanController extends Controller
             $query = Karyawan::query();
             $query = $query->with(['jabatan']);
             $query->where(function($q) use($meta){
-                $q->orWhere('nama', 'like', $meta['search'] . '%');
+                $q->orWhere('nama', 'like', '%'.$meta['search'] . '%');
             });
             $total = $query->count();
             $meta = Pagination::additionalMeta($meta, $total);

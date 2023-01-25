@@ -86,12 +86,14 @@ class KelolaGajiController extends Controller
         try {
             $meta = Pagination::defaultMetaInput($request->only(['page','perPage','order','dir','search']));
             $query = Penggajian::query();
-            $query = $query->with(['karyawan']);
+            $query = $query->with(['karyawan.jabatan']);
             if($request->filled('start_date') && $request->filled('end_date')){
                 $query = $query->whereBetween('tgl_penggajian', [$request->start_date, $request->end_date]);
             }
             $query->where(function($q) use($meta){
-                $q->orWhere('total_gaji', 'like', $meta['search'] . '%');
+                $q->orWhereHas('karyawan',function($qr)use($meta){
+                    $qr->where('nama', 'like', '%'.$meta['search'] . '%');
+                });
             });
             $total = $query->count();
             $meta = Pagination::additionalMeta($meta, $total);

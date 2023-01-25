@@ -26,7 +26,7 @@ class UserController extends ApiController
             $meta = Pagination::defaultMetaInput($request->only(['page','perPage','order','dir','search']));
             $query = User::query();
             $query->where(function($q) use($meta){
-                $q->orWhere('username', 'like', $meta['search'] . '%');
+                $q->orWhere('username', 'like','%'. $meta['search'] . '%');
             });
             $total = $query->count();
             $meta = Pagination::additionalMeta($meta, $total);
