@@ -75,7 +75,8 @@ class UserController extends Controller
                     'message'=>'The given data was invalid',
                     // 'data'=>$validator->messages()->toJson()
                 ];
-                return Response::send(400,$data);
+                // return Response::send(400,$data);
+                return $this->errorResponse($data, 422);
             }
             $storeData = User::create([
                 'email'=>$request->email,
@@ -88,7 +89,8 @@ class UserController extends Controller
                 'message'=>'Data Created Success',
                 'data'=>$storeData
             ];
-            return Response::send(200,$data);
+            // return Response::send(200,$data);
+            return $this->successResponse($data,'User Created', 201);
         }catch(Exception $th){
             return Response::send(500,$th->getMessage());
         }
