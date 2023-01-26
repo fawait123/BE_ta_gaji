@@ -24,7 +24,9 @@ class LaporanController extends Controller
 
         $data = $data->get();
         $pdf = Pdf::loadView('pdf.penggajian',[
-            'data'=>$data
+            'data'=>$data,
+            'start_date'=>$request->start_date,
+            'end_date'=>$request->end_date
         ]);
         return $pdf->download('laporan-penggajian.pdf');
     }
