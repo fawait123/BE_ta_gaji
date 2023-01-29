@@ -37,26 +37,33 @@ class LaporanController extends Controller
         $karyawan = Karyawan::with('jabatan')->get();
         foreach($karyawan as $kary)
         {
-            $absen = Absensi::query();
+            $sakit = Absensi::query();
+            $hadir = Absensi::query();
+            $alpha = Absensi::query();
+            $ijin = Absensi::query();
             if($request->filled('start_date') && $request->filled('end_date')){
-                $absen = $absen->whereBetween('tgl_absen',[$request->start_date,$request->end_date]);
+                $sakit = $sakit->whereBetween('tgl_absen',[$request->start_date,$request->end_date]);
+                $hadir = $hadir->whereBetween('tgl_absen',[$request->start_date,$request->end_date]);
+                $alpha = $alpha->whereBetween('tgl_absen',[$request->start_date,$request->end_date]);
+                $ijin = $ijin->whereBetween('tgl_absen',[$request->start_date,$request->end_date]);
             }
 
-            $sakit = $absen->where('status_kehadiran','like','%sakit%')->where('karyawan_id',$kary->id)->count();
-            $hadir = $absen->where('status_kehadiran','like','%hadir%')->where('karyawan_id',$kary->id)->count();
-            $alpha = $absen->where('status_kehadiran','like','%alpha%')->where('karyawan_id',$kary->id)->count();
-            $ijin = $absen->where('status_kehadiran','like','%ijin%')->where('karyawan_id',$kary->id)->count();
+            $sakit = $sakit->where('status_kehadiran','like','%'.'hadir'.'%')->where('karyawan_id',$kary->id);
+            $hadir = $hadir->where('status_kehadiran','like','%hadir%')->where('karyawan_id',$kary->id);
+            $alpha = $alpha->where('status_kehadiran','like','%alpha%')->where('karyawan_id',$kary->id);
+            $ijin = $ijin->where('status_kehadiran','like','%ijin%')->where('karyawan_id',$kary->id);
 
             array_push($data,[
                 'nama'=>$kary->nama ?? '',
                 'jabatan'=>$kary->jabatan->nama ?? '',
-                'sakit'=>$sakit ?? '',
-                'hadir'=>$hadir ?? '',
-                'alpha'=>$alpha ?? '',
-                'ijin'=>$ijin ?? '',
+                'sakit'=>$sakit->count(),
+                'hadir'=>$hadir->count(),
+                'alpha'=>$alpha->count(),
+                'ijin'=>$ijin->count(),
             ]);
 
         }
+
         // $data = Absensi::query();
         // $data = $data->with(['karyawan.jabatan']);
         // if($request->filled('start_date') && $request->filled('end_date')){
