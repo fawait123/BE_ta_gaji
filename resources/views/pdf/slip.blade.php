@@ -110,7 +110,7 @@
             </div>
             <div style="position: absolute;top:0;right:0;">
                 <span style="display:block">Sinduadi, {{ date('d M Y') }}</span>
-                <span>Kaum Danarta</span>
+                <span>Kaur Danarta</span>
                 <br>
                 <br>
                 <br>
