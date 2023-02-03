@@ -48,7 +48,7 @@ class LaporanController extends Controller
                 $ijin = $ijin->whereBetween('tgl_absen',[$request->start_date,$request->end_date]);
             }
 
-            $sakit = $sakit->where('status_kehadiran','like','%'.'hadir'.'%')->where('karyawan_id',$kary->id);
+            $sakit = $sakit->where('status_kehadiran','like','%sakit%')->where('karyawan_id',$kary->id);
             $hadir = $hadir->where('status_kehadiran','like','%hadir%')->where('karyawan_id',$kary->id);
             $alpha = $alpha->where('status_kehadiran','like','%alpha%')->where('karyawan_id',$kary->id);
             $ijin = $ijin->where('status_kehadiran','like','%ijin%')->where('karyawan_id',$kary->id);
