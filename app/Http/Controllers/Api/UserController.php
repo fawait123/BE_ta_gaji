@@ -61,24 +61,9 @@ class UserController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
         try{
-            $validator = Validator::make($request->all(),[
-                'email'=>'required|email:dns',
-                'username'=>'required',
-                'password'=>'required',
-                'role'=>'required'
-            ]);
-
-            if($validator->fails()){
-                $data = [
-                    'message'=>'The given data was invalid',
-                    // 'data'=>$validator->messages()->toJson()
-                ];
-                // return Response::send(400,$data);
-                return $this->errorResponse($data, 422);
-            }
             $storeData = User::create([
                 'email'=>$request->email,
                 'username'=>$request->username,
@@ -91,7 +76,7 @@ class UserController extends ApiController
                 'data'=>$storeData
             ];
             // return Response::send(200,$data);
-            return $this->successResponse($data,'User Created', 201);
+            return Response::send(201,$data);
         }catch(Exception $th){
             return Response::send(500,$th->getMessage());
         }
